@@ -8,11 +8,11 @@ import (
 	"github.com/go-redis/redis/v8"
 )
 
-type internalRedisClient struct {
+type InternalRedisClient struct {
 	client *redis.Client
 }
 
-func NewInternalRedisClient() (*internalRedisClient, error) {
+func NewInternalRedisClient() (*InternalRedisClient, error) {
 
 	// var ops *redis.Options
 	ops := &redis.Options{
@@ -31,16 +31,16 @@ func NewInternalRedisClient() (*internalRedisClient, error) {
 
 	fmt.Println("🔌 Connected to Internal BizzMQ client database")
 
-	return &internalRedisClient{
+	return &InternalRedisClient{
 		client: internalClient,
 	}, nil
 
 }
 
-func (r *internalRedisClient) GetInternalRedisClient() *redis.Client {
+func (r *InternalRedisClient) GetInternalRedisClient() *redis.Client {
 	return r.client
 }
 
-func (r *internalRedisClient) CloseInternalRedisClient() error {
+func (r *InternalRedisClient) CloseInternalRedisClient() error {
 	return r.client.Close()
 }

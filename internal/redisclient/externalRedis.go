@@ -9,11 +9,11 @@ import (
 	"github.com/go-redis/redis/v8"
 )
 
-type externalRedisClient struct {
+type ExternalRedisClient struct {
 	client *redis.Client
 }
 
-func NewExternalRedisClient() (*externalRedisClient, error) {
+func NewExternalRedisClient() (*ExternalRedisClient, error) {
 	redisHost := os.Getenv("REDIS-HOST")
 	redisPort := os.Getenv("REDIS-PORT")
 	redisPassword := os.Getenv("REDIS_PASSWORD")
@@ -45,16 +45,16 @@ func NewExternalRedisClient() (*externalRedisClient, error) {
 
 	fmt.Println("🔌 Connected to External BizzMQ client database")
 
-	return &externalRedisClient{
+	return &ExternalRedisClient{
 		client: externalClient,
 	}, nil
 
 }
 
-func (r *externalRedisClient) GetExternalRedisClient() *redis.Client {
+func (r *ExternalRedisClient) GetExternalRedisClient() *redis.Client {
 	return r.client
 }
 
-func (r *externalRedisClient) CloseRedisClient() error {
+func (r *ExternalRedisClient) CloseRedisClient() error {
 	return r.client.Close()
 }
