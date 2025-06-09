@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"log"
 	"net"
@@ -18,6 +19,11 @@ type Server struct {
 // 	// internalRedis *redisclient.NewInternalRedisClient()
 // 	externalRedis *redisclient.NewExternalRedisClient()
 // }
+
+func (s *Server) HeartBeatExchange(ctx context.Context, req *pb.RequestHeartBeat) (*pb.ReplyHeartBeat, error) {
+	log.Printf("Recieved Heartbeat signal from %v with signal id as ", req.InstanceId, req.SignalId)
+	return &pb.ReplyHeartBeat{InstanceId: req.InstanceId, SignalId: req.SignalId}, nil
+}
 
 func main() {
 
@@ -42,4 +48,6 @@ func main() {
 	if err := grpcserver.Serve(lis); err != nil {
 		log.Fatalf("failed to serve: %v", err)
 	}
+	fmt.Println("TCP Connection is Running and Ready to process")
+
 }
