@@ -15,19 +15,21 @@ type InternalRedisClient struct {
 func NewInternalRedisClient() (*InternalRedisClient, error) {
 
 	// var ops *redis.Options
-	ops := &redis.Options{
-		Addr:     "localhost:6379",
-		Password: "",
+	opts, err := redis.ParseURL("redis://localhost:6379")
+	if err != nil {
+		return nil, fmt.Errorf("failed to parse Redis URL: %w", err)
 	}
 
-	internalClient := redis.NewClient(ops)
+	internalClient := redis.NewClient(opts)
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
-	_, err := internalClient.Ping(ctx).Result()
-	if err != nil {
+	status, errcon := internalClient.Ping(ctx).Result()
+	if errcon != nil {
 		return nil, fmt.Errorf("failed to connect to Internal Redis Instance: %w", err)
 	}
+
+	fmt.Println(status)
 
 	fmt.Println("🔌 Connected to Internal BizzMQ client database")
 
